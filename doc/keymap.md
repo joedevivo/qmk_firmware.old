@@ -22,6 +22,7 @@ For trivial key definitions, the higher 8 bits of the **action code** are all 0 
 
 Respective layers can be validated simultaneously. Layers are indexed with 0 to 31 and higher layer has precedence.
 
+```
     Keymap: 32 Layers                   Layer: action code matrix
     -----------------                   ---------------------
     stack of layers                     array_of_action_code[row][column]
@@ -35,7 +36,7 @@ Respective layers can be validated simultaneously. Layers are indexed with 0 to 
        2 /___________// |               2 `--------------------------
        1 /___________// |               1 `--------------------------
        0 /___________/  V low           0 `--------------------------
-
+```
 
 Sometimes, the action code stored in keymap may be referred as keycode in some documents due to the TMK history.
 
@@ -49,6 +50,7 @@ Keymap has its state in two parameter **`default_layer`** indicates a base keyma
 Keymap layer '0' is usually `default_layer` and which is the only valid layer and other layers is initially off after boot up firmware, though, you can configured them in `config.h`.
 To change `default_layer` will be useful when you switch key layout completely, say you want Colmak instead of Qwerty.
 
+```
     Initial state of Keymap          Change base layout              
     -----------------------          ------------------              
 
@@ -63,9 +65,11 @@ To change `default_layer` will be useful when you switch key layout completely, 
     |                                |
     `--- default_layer = 0           `--- default_layer = 1
          layer_state   = 0x00000001       layer_state   = 0x00000002
+```
 
 On the other hand, you shall change `layer_state` to overlay base layer with some layers for feature such as navigation keys, function key(F1-F12), media keys or special actions.
 
+```
     Overlay feature layer
     ---------------------      bit|status
            ____________        ---+------
@@ -80,7 +84,7 @@ On the other hand, you shall change `layer_state` to overlay base layer with som
     |                                 +
     `--- default_layer = 1            |
          layer_state   = 0x60000002 <-'
-
+```
 
 
 ### 0.2 Layer Precedence and Transparency
@@ -104,6 +108,7 @@ In this example,
  `MO(layer)` is a **momentary layer switching** key.
 
 You can find other keymap definitions in file `keymap.c` located on project directories.
+
 ```
 /*
  * dbroqua HHKB Layout
@@ -207,7 +212,7 @@ Keycode has `KC_` prefixed symbol respectively. Most of keycodes like `KC_A` hav
 
 keymaps[]
 
-In `KEYMAP()` macro, TMK recommends you to keep prefix part `KC_` of keycode to keep keymap compact. For example, just use `A` instead you place `KC_A` in `KEYMAP()`.  But this doesn't apply for QMK. 
+In `KEYMAP()` macro, TMK recommends you to keep prefix part `KC_` of keycode to keep keymap compact. For example, just use `A` instead you place `KC_A` in `KEYMAP()`.  But this doesn't apply for QMK.
 
 The `KEYMAP()` macro defines correspondence between the physical key location to the electrical key connection.
 
@@ -226,7 +231,7 @@ Some keycodes has 7-letter **short name** such as `KC_COMM` in addition to descr
 - `KC_P1` to `KC_P0`, `KC_PDOT`, `KC_PCMM`, `KC_PSLS`, `KC_PAST`, `KC_PMNS`, `KC_PPLS`, `KC_PEQL`, `KC_PENT` for keypad.
 
 ### 1.2 Modifier
-There are 8 modifiers which has discrimination between left and right. 
+There are 8 modifiers which has discrimination between left and right.
 
 - `KC_LCTL` and `KC_RCTL` for Control
 - `KC_LSFT` and `KC_RSFT` for Shift
@@ -329,7 +334,7 @@ This sets Default Layer to given parameter `layer` and activate it.
     ACTION_DEFAULT_LAYER_SET(layer)
 
 
-#### 2.2.2 Momentary 
+#### 2.2.2 Momentary
 Turns on `layer` momentarily while holding, in other words it activates when key is pressed and deactivate when released.
 
     ACTION_LAYER_MOMENTARY(layer)
@@ -419,7 +424,7 @@ Default Layer also has bitwise operations, they are executed when key is release
 ***TBD***
 
 `Macro` action indicates complex key strokes.
- 
+
     MACRO( D(LSHIFT), D(D), END )
     MACRO( U(D), U(LSHIFT), END )
     MACRO( I(255), T(H), T(E), T(L), T(L), W(255), T(O), END )
@@ -458,12 +463,15 @@ To define tappable `Function` action in keymap use this.
 #### 2.4.3 Implement user function
 `Function` actions can be defined freely with C by user in callback function:
 
-    void keymap_call_function(keyrecord_t *event, uint8_t id, uint8_t opt)
+```c
+void keymap_call_function(keyrecord_t *event, uint8_t id, uint8_t opt)
+```
 
 This C function is called every time key is operated, argument `id` selects action to be performed and `opt` can be used for option. Function `id` can be 0-255 and `opt` can be 0-15.
 
  `keyrecord_t` is comprised of key event and tap count. `keyevent_t` indicates which and when key is pressed or released. From `tap_count` you can know tap state, 0 means no tap. These information will be used in user function to decide how action of key is performed.
 
+```c
     typedef struct {
         keyevent_t  event;
         uint8_t     tap_count;
@@ -479,11 +487,10 @@ This C function is called every time key is operated, argument `id` selects acti
         uint8_t col;
         uint8_t row;
     } key_t;
+```
 
 ***TODO: sample implementation***
 See `keyboards/hhkb/keymap.c` for sample.
-
-
 
 ### 2.5 Backlight Action
 These actions control the backlight.
@@ -491,26 +498,34 @@ These actions control the backlight.
 #### 2.5.1 Change backlight level
 Increase backlight level.
 
-    ACTION_BACKLIGHT_INCREASE()
+```c
+ACTION_BACKLIGHT_INCREASE()
+```
 
 Decrease backlight level.
 
-    ACTION_BACKLIGHT_DECREASE()
+```c
+ACTION_BACKLIGHT_DECREASE()
+```
 
 Step through backlight levels.
 
-    ACTION_BACKLIGHT_STEP()
+```c
+ACTION_BACKLIGHT_STEP()
+```
 
 Turn a specific backlight level on or off.
 
-    ACTION_BACKLIGHT_LEVEL(1)
+```
+ACTION_BACKLIGHT_LEVEL(1)
+```
 
 #### 2.5.2 Turn on / off backlight
 Turn the backlight on and off without changing level.
 
-    ACTION_BACKLIGHT_TOGGLE()
-
-
+```c
+ACTION_BACKLIGHT_TOGGLE()
+```
 
 ### 2.6 Swap-Hands Action
 The swap-hands action allows support for one-handed keyboards without requiring a separate layer. Set `ONEHAND_ENABLE` in the Makefile and define a `hand_swap_config` entry in your keymap. Now whenever the `ACTION_SWAP_HANDS` command key is pressed the keyboard is mirrored. For instance, to type "Hello, World" on QWERTY you would type `^Ge^s^s^w^c W^wr^sd`
@@ -518,7 +533,7 @@ The swap-hands action allows support for one-handed keyboards without requiring 
 ### 2.6.1 Configuration
 The configuration table is a simple 2-dimensional array to map from column/row to new column/row. Example `hand_swap_config` for Planck:
 
-```
+```c
 const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
   {{11, 0}, {10, 0}, {9, 0}, {8, 0}, {7, 0}, {6, 0}, {5, 0}, {4, 0}, {3, 0}, {2, 0}, {1, 0}, {0, 0}},
   {{11, 1}, {10, 1}, {9, 1}, {8, 1}, {7, 1}, {6, 1}, {5, 1}, {4, 1}, {3, 1}, {2, 1}, {1, 1}, {0, 1}},
@@ -540,7 +555,6 @@ Note that the array indices are reversed same as the matrix and the values are o
 - **`ACTION_SWAP_HANDS_OFF()`** Turn off swapping and leaves it off. Good for returning to a known state.
 
 
-
 ## 3. Layer switching Example
 There are some ways to switch layer with 'Layer' actions.
 
@@ -549,46 +563,48 @@ Momentary switching changes layer only while holding Fn key.
 
 This action makes 'Layer 1' active(valid) on key press event and inactive on release event. Namely you can overlay a layer on lower layers or default layer temporarily with this action.
 
-    ACTION_LAYER_MOMENTARY(1)
-
+```c
+ACTION_LAYER_MOMENTARY(1)
+```
 
 Note that after switching on press the actions on destination layer(Layer 1) are performed.
-***Thus you shall need to place an action to go back on destination layer***, or you will be stuck in destination layer without way to get back. Usually you need to place same action or 'KC_TRNS` on destination layer to get back.
-
+***Thus you shall need to place an action to go back on destination layer***, or you will be stuck in destination layer without way to get back. Usually you need to place same action or `KC_TRNS` on destination layer to get back.
 
 ### 3.2 Toggle switching
 Toggle switching performed after releasing a key. With this action you can keep staying on the destination layer until you type the key again to return.
 
 This performs toggle switching action of 'Layer 2'.
 
-    ACTION_LAYER_TOGGLE(2)
-
+```c
+ACTION_LAYER_TOGGLE(2)
+```
 
 
 ### 3.3 Momentary switching with Tap key
 These actions switch a layer only while holding a key but register the key on tap. **Tap** means to press and release a key quickly.
 
-    ACTION_LAYER_TAP_KEY(2, KC_SCLN)
+```c
+ACTION_LAYER_TAP_KEY(2, KC_SCLN)
+```
 
 With this you can place a layer switching action on normal key like ';' without losing its original key register function. This action allows you to have layer switching action without necessity of a dedicated key. It means you can have it even on home row of keyboard.
-
 
 
 ### 3.4 Momentary switching with Tap Toggle
 This switches layer only while holding a key but toggle layer with several taps. **Tap** means to press and release key quickly.
 
-    ACTION_LAYER_TAP_TOGGLE(1)
+```c
+ACTION_LAYER_TAP_TOGGLE(1)
+```
 
 Number of taps can be configured with `TAPPING_TOGGLE` in `config.h`, `5` by default.
-
-
 
 ### 3.5 Momentary switching with Modifiers
 This registers modifier key(s) simultaneously with layer switching.
 
-    ACTION_LAYER_MODS(2, MOD_LSFT | MOD_LALT)
-
-
+```c
+ACTION_LAYER_MODS(2, MOD_LSFT | MOD_LALT)
+```
 
 ## 4. Tapping
 Tapping is to press and release a key quickly. Tapping speed is determined with setting of `TAPPING_TERM`, which can be defined in `config.h`, 200ms by default.
@@ -598,13 +614,17 @@ This is a feature to assign normal key action and modifier including layer switc
 
 Modifier with tap key:
 
-    ACTION_MODS_TAP_KEY(MOD_RSFT, KC_GRV)
+```c
+ACTION_MODS_TAP_KEY(MOD_RSFT, KC_GRV)
+```
 
 Layer switching with tap key:
 
-    ACTION_LAYER_TAP_KEY(2, KC_SCLN)
+```c
+ACTION_LAYER_TAP_KEY(2, KC_SCLN)
+```
 
-[dual_role]: http://en.wikipedia.org/wiki/Modifier_key#Dual-role_keys
+[dual_role](http://en.wikipedia.org/wiki/Modifier_key#Dual-role_keys)
 
 When user hold a key after tap, it repeat the tapped key rather to hold a modifier key.
 If you prefer to hold a modifier instead, define `TAPPING_FORCE_HOLD` in `config.h`.
@@ -613,17 +633,22 @@ See https://github.com/qmk/qmk_firmware/issues/889 for the detail.
 ### 4.2 Tap Toggle
 This is a feature to assign both toggle layer and momentary switch layer action to just same one physical key. It works as momentary layer switch when holding a key but toggle switch with several taps.
 
-    ACTION_LAYER_TAP_TOGGLE(1)
-
+```c
+ACTION_LAYER_TAP_TOGGLE(1)
+```
 
 ### 4.3 Oneshot Modifier
 This runs onetime effects which modify only on just one following key. It works as normal modifier key when holding down while oneshot modifier when tapping. The behavior of oneshot modifiers is similar to the [sticky keys](https://en.wikipedia.org/wiki/StickyKeys) functionality found in most operating systems.
 
-    ACTION_MODS_ONESHOT(MOD_LSFT)
+```c
+ACTION_MODS_ONESHOT(MOD_LSFT)
+```
 
 Oneshot layer key:
 
-    ACTION_LAYER_ONESHOT(MY_LAYER)
+```c
+ACTION_LAYER_ONESHOT(MY_LAYER)
+```
 
 Say you want to type 'The', you have to push and hold Shift key before type 't' then release it before type 'h' and 'e', otherwise you'll get 'THe' or 'the' unintentionally. With Oneshot Modifier you can tap Shift then type 't', 'h' and 'e' normally, you don't need to holding Shift key properly here. This mean you can release Shift before 't' is pressed down.
 
@@ -635,11 +660,9 @@ Most implementations of sticky keys allow you to lock a modifier by double tappi
 ### 4.4 Tap Toggle Mods
 Similar to layer tap toggle, this works as a momentary modifier when holding, but toggles on with several taps. A single tap will 'unstick' the modifier again.
 
-    ACTION_MODS_TAP_TOGGLE(MOD_LSFT)
-
-
-
-
+```c
+ACTION_MODS_TAP_TOGGLE(MOD_LSFT)
+```
 ## 5. Legacy Keymap
 In QMK, `tmk_core/common/keymap.c` is missing and its replacement `quantum/keymap_common.c` lacks Legacy Keymap support.
 
@@ -647,17 +670,19 @@ Legacy Keymap uses two arrays `fn_layer[]` and `fn_keycode[]` to define Fn key. 
 
 In the following legacy keymap setting example, `Fn0`, `Fn1` and `Fn2` switch layer to 1, 2 and 2 respectively. `Fn2` registers `Space` key when tapping while `Fn0` and `Fn1` doesn't send any key.
 
-    static const uint8_t PROGMEM fn_layer[] = {
-        1,              // Fn0
-        2,              // Fn1
-        2,              // Fn2
-    };
+```c
+static const uint8_t PROGMEM fn_layer[] = {
+    1,              // Fn0
+    2,              // Fn1
+    2,              // Fn2
+};
 
-    static const uint8_t PROGMEM fn_keycode[] = {
-        KC_NO,          // Fn0
-        KC_NO,          // Fn1
-        KC_SPC,         // Fn2
-    };
+static const uint8_t PROGMEM fn_keycode[] = {
+    KC_NO,          // Fn0
+    KC_NO,          // Fn1
+    KC_SPC,         // Fn2
+};
+```
 
 Under QMK, these can be realized using action code ACTION_LAYER_TAP_KEY(1, KC_NO), ACTION_LAYER_TAP_KEY(2, KC_NO), and ACTION_LAYER_TAP_KEY(2, KC_SPC) in the `keymaps` directly.
 
