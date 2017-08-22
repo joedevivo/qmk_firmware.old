@@ -31,13 +31,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * |   =    |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |   -    |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Del    |   Q  |   W  |   E  |   R  |   T  |  L1  |           |  L1  |   Y  |   U  |   I  |   O  |P/MDIA|   \    |
+ * | Del    |   Q  |   W  |   E  |   R  |   T  |      |           |      |   Y  |   U  |   I  |   O  |   P  |   \    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | Ctrl   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |   ;  |' / Cmd |
- * |--------+------+------+------+------+------| Hyper|           | Meh  |------+------+------+------+------+--------|
+ * | Ctrl   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |;/MDIA|' / Cmd |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * | LShift |Z/Ctrl|   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |//Ctrl| RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |      |Grv/L1|  '"  | Left | Right|                                       |  Up  | Down |   [  |   ]  | ~L1  |
+ *   | ~L1  |  `~  |  '"  | Left | Right|                                       |  Up  | Down |   [  |   ]  | ~L1  |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |⌘/Esc| Alt  |       | Ctrl | ⌘    |
@@ -51,11 +51,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Otherwise, it needs KC_*
 [BASE] = KEYMAP(  // layer 0 : default
         // left hand
-        KC_EQL,         KC_1,         KC_2,   KC_3,   KC_4,   KC_5,   XXXXXX,
-        KC_TAB,         KC_Q,         KC_W,   KC_E,   KC_R,   KC_T,   XXXXXX,
-        OSM_LCTL,       KC_A,         KC_S,   KC_D,   KC_F,   KC_G,
-        OSM_LSFT,       CTL_T(KC_Z),  KC_X,   KC_C,   KC_V,   KC_B,   XXXXXX,
-        XXXXXX,         LT(SYMB,KC_GRV),KC_QUOT,       KC_LEFT,KC_RGHT,
+        KC_EQL,    KC_1,        KC_2,    KC_3,    KC_4,   KC_5,   XXXXXX,
+        KC_TAB,    KC_Q,        KC_W,    KC_E,    KC_R,   KC_T,   XXXXXX,
+        OSM_LCTL,  KC_A,        KC_S,    KC_D,    KC_F,   KC_G,
+        OSM_LSFT,  CTL_T(KC_Z), KC_X,    KC_C,    KC_V,   KC_B,   XXXXXX,
+        MO(SYMB),  KC_GRV,      KC_QUOT, KC_LEFT, KC_RGHT,
                                                     LGUI_T(KC_ESC), OSM_LALT,
                                                                      KC_HOME,
                                                 KC_BSPACE, KC_DELETE, KC_END,
@@ -98,7 +98,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_TRNS,KC_HASH,KC_DLR, KC_LPRN,KC_RPRN,KC_GRV,
        KC_TRNS,KC_PERC,KC_CIRC,KC_LBRC,KC_RBRC,KC_TILD,KC_TRNS,
           EPRM,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-                                       RGB_MOD, QWERTY,
+                                       RGB_MOD,   EPRM,
                                                KC_TRNS,
                                RGB_VAD,RGB_VAI,KC_TRNS,
        // right hand
@@ -254,8 +254,8 @@ void binary_lights(uint8_t number) {
       ergodox_right_led_3_on();
       break;
     default:
-      ergodox_blink_all_leds();
-      ergodox_blink_all_leds();
+      //ergodox_blink_all_leds();
+      //ergodox_blink_all_leds();
       break;
   }
 }
