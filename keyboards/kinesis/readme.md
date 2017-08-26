@@ -6,6 +6,8 @@ The Stapelberg folder contains the docs and configuration for using the custom c
 
 The alvicstep folder contains docs and configuration for directly wiring a  Teensy2++ to the existing controller board. This follows the pinouts described in https://github.com/alvicstep/tmk_keyboard, which is where the name comes from. 
 
+The joedevivo folder contains docs and configuration for a Teensy3.2 based PCB, that essentially gives you a Kinesis on the outside and Ergodox Infinity on the inside.
+
 ## Keymaps
 Both hardware solutions should work with the same keymaps
 

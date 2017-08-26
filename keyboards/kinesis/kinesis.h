@@ -4,6 +4,9 @@
 #ifdef SUBPROJECT_alvicstep
 	#include "alvicstep.h"
 #endif
+#ifdef SUBPROJECT_joedevivo
+	#include "joedevivo.h"
+#endif
 #ifdef SUBPROJECT_stapelberg
 	#include "stapelberg.h"
 #endif
