@@ -43,29 +43,31 @@ static uint16_t debouncing_time = 0;
 void matrix_init(void)
 {
     /* Column(sense) */
-    palSetPadMode(GPIOD, 1,  PAL_MODE_INPUT_PULLDOWN);
-    palSetPadMode(GPIOD, 2,  PAL_MODE_INPUT_PULLDOWN);
-    palSetPadMode(GPIOD, 3,  PAL_MODE_INPUT_PULLDOWN);
-    palSetPadMode(GPIOD, 4,  PAL_MODE_INPUT_PULLDOWN);
-    palSetPadMode(GPIOD, 5,  PAL_MODE_INPUT_PULLDOWN);
-    palSetPadMode(GPIOD, 6,  PAL_MODE_INPUT_PULLDOWN);
-    palSetPadMode(GPIOD, 7,  PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOD, 1,  PAL_MODE_OUTPUT_PUSHPULL);
+    palSetPadMode(GPIOD, 2,  PAL_MODE_OUTPUT_PUSHPULL);
+    palSetPadMode(GPIOD, 3,  PAL_MODE_OUTPUT_PUSHPULL);
+    palSetPadMode(GPIOD, 4,  PAL_MODE_OUTPUT_PUSHPULL);
+    palSetPadMode(GPIOD, 5,  PAL_MODE_OUTPUT_PUSHPULL);
+    palSetPadMode(GPIOD, 6,  PAL_MODE_OUTPUT_PUSHPULL);
+    palSetPadMode(GPIOD, 7,  PAL_MODE_OUTPUT_PUSHPULL);
 
     /* Row(strobe) */
-    palSetPadMode(GPIOB, 2,  PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOB, 3,  PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOB, 18, PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOB, 19, PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOC, 0,  PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOC, 9,  PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOC, 10, PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOC, 11, PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOD, 0,  PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOA, 12, PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOA, 13, PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOA, 4,  PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOE, 1,  PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOE, 0,  PAL_MODE_OUTPUT_PUSHPULL);
+    //TODO: Backlight
+    //palSetPadMode(GPIOB, 2,  PAL_MODE_INPUT_PULLDOWN);
+    //palSetPadMode(GPIOB, 3,  PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOB, 18, PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOB, 19, PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOC, 0,  PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOC, 9,  PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOC, 10, PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOC, 11, PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOD, 0,  PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOA, 12, PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOA, 13, PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOA, 4,  PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOE, 1,  PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOE, 0,  PAL_MODE_INPUT_PULLDOWN);
+    palSetPadMode(GPIOA, 5,  PAL_MODE_INPUT_PULLDOWN);
 
     memset(matrix, 0, MATRIX_ROWS);
     memset(matrix_debouncing, 0, MATRIX_ROWS);
@@ -80,6 +82,14 @@ uint8_t matrix_scan(void)
 
         // strobe row
         switch (row) {
+            case 0:  palSetPad(GPIOD, 1);    break;
+            case 1:  palSetPad(GPIOD, 2);    break;
+            case 2:  palSetPad(GPIOD, 3);    break;
+            case 3:  palSetPad(GPIOD, 4);    break;
+            case 4:  palSetPad(GPIOD, 5);    break;
+            case 5:  palSetPad(GPIOD, 6);    break;
+            case 6:  palSetPad(GPIOD, 7);    break;
+            /*
             case 0:  palSetPad(GPIOB, 2);    break;
             case 1:  palSetPad(GPIOB, 3);    break;
             case 2:  palSetPad(GPIOB, 18);   break;
@@ -94,6 +104,8 @@ uint8_t matrix_scan(void)
             case 11: palSetPad(GPIOA, 4);    break;
             case 12: palSetPad(GPIOE, 1);    break;
             case 13: palSetPad(GPIOE, 0);    break;
+            case 14: palSetPad(GPIOA, 5);    break;
+            */
         }
 
         // need wait to settle pin state
@@ -104,10 +116,40 @@ uint8_t matrix_scan(void)
         wait_us(20);
 
         // read col data: { PTD1, PTD2, PTD3, PTD4, PTD5, PTD6, PTD7 }
-        data = (palReadPort(GPIOD) >> 1);
+        //data = (palReadPort(GPIOC) >> 4) & 64;
+       
+        data = (
+         // TODO: Used these pins for both matrix and backlight!
+         //   ((palReadPad(GPIOB, 2)       ) )  
+         //|  ((palReadPad(GPIOB, 3)  <<  1) )  
+            ((palReadPad(GPIOB, 18) <<  2) )  
+         |  ((palReadPad(GPIOB, 19) <<  3) )  
+         |  ((palReadPad(GPIOC, 0)  <<  4) )   
+         |  ((palReadPad(GPIOC, 9)  <<  5) )   
+         |  ((palReadPad(GPIOC, 10) <<  6) )   
+         |  ((uint32_t)(palReadPad(GPIOC, 11) <<  7) )    
+         |  ((uint32_t)(palReadPad(GPIOD, 0)  <<  8) )    
+         |  ((uint32_t)(palReadPad(GPIOA, 12) <<  9) )    
+         |  ((uint32_t)(palReadPad(GPIOA, 13) << 10) )     
+         |  ((uint32_t)(palReadPad(GPIOA, 4)  << 11) )     
+         |  ((uint32_t)(palReadPad(GPIOE, 1)  << 12) )     
+         |  ((uint32_t)(palReadPad(GPIOE, 0)  << 13) )     
+         |  ((uint32_t)(palReadPad(GPIOA, 5)  << 14) )      
+        );
+//        data = palReadPad(GPIOC, 10) << 5;
+
+//        data = (palReadPort(GPIOD) >> 1);
 
         // un-strobe row
         switch (row) {
+            case 0:  palClearPad(GPIOD, 1);    break;
+            case 1:  palClearPad(GPIOD, 2);    break;
+            case 2:  palClearPad(GPIOD, 3);    break;
+            case 3:  palClearPad(GPIOD, 4);    break;
+            case 4:  palClearPad(GPIOD, 5);    break;
+            case 5:  palClearPad(GPIOD, 6);    break;
+            case 6:  palClearPad(GPIOD, 7);    break;
+            /*
             case 0:  palClearPad(GPIOB, 2);  break;
             case 1:  palClearPad(GPIOB, 3);  break;
             case 2:  palClearPad(GPIOB, 18); break;
@@ -120,8 +162,10 @@ uint8_t matrix_scan(void)
             case 9:  palClearPad(GPIOA, 12); break;
             case 10: palClearPad(GPIOA, 13); break;
             case 11: palClearPad(GPIOA, 4);  break;
-            case 12: palClearPad(GPIOE, 1);  break;
+            case 812: palClearPad(GPIOE, 1);  break;
             case 13: palClearPad(GPIOE, 0);  break;
+            case 14: palClearPad(GPIOA, 5);  break;
+            */
         }
         if (matrix_debouncing[row] != data) {
             matrix_debouncing[row] = data;

@@ -104,7 +104,16 @@ inline void ergodox_led_all_set(uint8_t n) {
     k86,                                  \
     k66,k75,k65                           \
 ) {                                       \
-        { k00,    k01,    k02,    k03,    kE0,    kE1,    kE2 }, \
+    {k00,   k10,   k20,   k30, k40,   k50, k60, k70,   k80, k90,   kA0,   kB0,   kC0,   kD0,   kE0 }, \
+    {k01,   k11,   k21,   k31, k41,   k51, k61, k71,   k81, k91,   kA1,   kB1,   kC1,   kD1,   kE1 }, \
+    {k02,   k12,   k22,   k32, k42,   k52, k62, k72,   k82, k92,   kA2,   kB2,   kC2,   kD2,   kE2 }, \
+    {k03,   k13,   k23,   k33, k43,   k53, k63, k73,   k83, k93,   kA3,   kB3,   kC3,   kD3,   kE3 }, \
+    {KC_NO, k14,   k24,   k34, KC_NO, k54, k64, KC_NO, k84, k94,   kA4,   KC_NO, kC4,   kD4,   kE4 }, \
+    {KC_NO, KC_NO, k25,   k35, KC_NO, k55, k65, k75,   k85, KC_NO, KC_NO, KC_NO, kC5,   kD5,   kE5 }, \
+    {KC_NO, KC_NO, KC_NO, k36, k46,   k56, k66, KC_NO, k86, k96,   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO }, \
+  }
+/*
+        { k00,    k01,    k02,    k03,    KC_NO,  KC_NO,  KC_NO }, \
         { k10,    k11,    k12,    k13,    k14,    KC_NO,  KC_NO }, \
         { k20,    k21,    k22,    k23,    k24,    k25,    KC_NO }, \
         { k30,    k31,    k32,    k33,    k34,    k35,    k36   }, \
@@ -115,11 +124,13 @@ inline void ergodox_led_all_set(uint8_t n) {
         { k80,    k81,    k82,    k83,    k84,    k85,    k86   }, \
         { k90,    k91,    k92,    k93,    k94,    KC_NO,  k96   }, \
         { kA0,    kA1,    kA2,    kA3,    kA4,    KC_NO,  KC_NO }, \
-        { kB0,    kB1,    kB2,    kB3,    kE3,    kE4,    kE5 }, \
+        { kB0,    kB1,    kB2,    kB3,    KC_NO,  KC_NO,  KC_NO }, \
         { kC0,    kC1,    kC2,    kC3,    kC4,    kC5,    KC_NO }, \
         { kD0,    kD1,    kD2,    kD3,    kD4,    kD5,    KC_NO }, \
-}
+        { kE0,    kE1,    kE2,    kE3,    kE4,    kE5,    KC_NO }, \
 
+    }
+*/
 /*
 This is the Stapelberg matrix as published at
 https://github.com/stapelberg/kinesis-firmware/blob/master/kb_kinesis/config.kspec
@@ -127,7 +138,7 @@ Along with the pins for each row and column
                   14   7   8   6  20  21   5
                  PD1 PD2 PD3 PD4 PD5 PD6 PD7
                  kx0 kx1 kx2 kx3 kx4 kx5 kx6
-19 PB2  k0x Row: EQL TAB CAP LSH F2  F5  F8
+19 PB2  k0x Row: EQL TAB CAP LSH --  --  --
 18 PB3  k1x Row: 1   Q   A   Z   BQ  --  --
 32 PB18 k2x Row: 2   W   S   X   INS END --
 25 PB19 k3x Row: 3   E   D   C   LFT HOM BAK
@@ -138,10 +149,10 @@ Along with the pins for each row and column
 2  PD0  k8x Row: 8   I   K   COM DWN RCT PGU
 3  PA12 k9x Row: 9   O   L   PER LBR --  RAL
 4  PA13 kAx Row: 0   P   SEM SLA RBR --  --
-33 PA4  kBx Row: MIN BSL APO RSH F11 SLK KEY
+33 PA4  kBx Row: MIN BSL APO RSH --  --  --
 26 PE1  kCx Row: ESC F3  F6  F9  F12 PAU --
 31 PE0  kDx Row: F1  F4  F7  F10 PRT PRG --
-
+24 PA5  kEx Row: F2  F5  F8  F11 SLK KEY --
 */
 
 
