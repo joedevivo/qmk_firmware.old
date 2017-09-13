@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "print.h"
 #include "debug.h"
 #include "matrix.h"
-
+#include "serial_link/system/serial_link.h"
 
 /*
  * Infinity ErgoDox Pinusage:
@@ -40,8 +40,10 @@ static matrix_row_t matrix_debouncing[MATRIX_ROWS];
 static bool debouncing = false;
 static uint16_t debouncing_time = 0;
 
+
 void matrix_init(void)
 {
+    print("matrix init\n");
     /* Column(sense) */
     palSetPadMode(GPIOD, 1,  PAL_MODE_OUTPUT_PUSHPULL);
     palSetPadMode(GPIOD, 2,  PAL_MODE_OUTPUT_PUSHPULL);
@@ -196,6 +198,7 @@ matrix_row_t matrix_get_row(uint8_t row)
 
 void matrix_print(void)
 {
+    /*
     xprintf("\nr/c 01234567\n");
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         xprintf("%02X: ");
@@ -208,4 +211,10 @@ void matrix_print(void)
         }
         xprintf("\n");
     }
+    */
 }
+
+void matrix_set_remote(matrix_row_t* rows, uint8_t index) {
+
+}
+

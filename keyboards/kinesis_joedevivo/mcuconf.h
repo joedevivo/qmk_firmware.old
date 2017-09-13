@@ -70,5 +70,4 @@
 #define KINETIS_SPI_USE_SPI0                TRUE
 
 #define KINETIS_I2C_USE_I2C0                TRUE
-
 #endif /* _MCUCONF_H_ */

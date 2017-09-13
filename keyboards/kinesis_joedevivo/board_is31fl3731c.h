@@ -36,26 +36,19 @@ static const uint8_t led_mask[] = {
 
 // The address of the LED
 #define LA(c, r) (c + r * 16 )
-// Need to be an address that is not mapped, but inside the range of the controller matrix
-#define NA LA(8, 8)
 
 // The numbers in the comments are the led numbers DXX on the PCB
 // The mapping is taken from the schematic of left hand side
 static const uint8_t led_mapping[GDISP_SCREEN_HEIGHT][GDISP_SCREEN_WIDTH] = {
-//   45        44        43        42        41        40        39
-   { LA(1, 1), LA(1, 0), LA(0, 4), LA(0, 3), LA(0, 2), LA(0, 1), LA(0, 0)},
-//   52        51        50        49        48        47        46
-   { LA(2, 3), LA(2, 2), LA(2, 1), LA(2, 0), LA(1, 4), LA(1, 3), LA(1, 2) },
-//   58        57        56        55        54        53        N/A
-   { LA(3, 4), LA(3, 3), LA(3, 2), LA(3, 1), LA(3, 0), LA(2, 4), NA },
-//   67        66        65        64        63        62        61
-   { LA(5, 3), LA(5, 2), LA(5, 1), LA(5, 0), LA(4, 4), LA(4, 3), LA(4, 2) },
-//   76        75        74        73        72        60        59
-   { LA(7, 3), LA(7, 2), LA(7, 1), LA(7, 0), LA(6, 3), LA(4, 1), LA(4, 0) },
-//   N/A       N/A       N/A       N/A       N/A       N/A       68
-   { NA,       NA,       NA,       NA,       NA,       NA,       LA(5, 4) },
-//   N/A       N/A       N/A       N/A       71        70        69
-   { NA,       NA,       NA,       NA,       LA(6, 2), LA(6, 1), LA(6, 0) },
+    { LA(0, 0), LA(1, 0), LA(2, 0), LA(3, 0), LA(4, 0), LA(5, 0), LA(6, 0), LA(7, 0), LA(8, 0), LA(9, 0), LA(10, 0), LA(11, 0), LA(12, 0), LA(13, 0), LA(14, 0), LA(15, 0)},
+    { LA(0, 1), LA(1, 1), LA(2, 1), LA(3, 1), LA(4, 1), LA(5, 1), LA(6, 1), LA(7, 1), LA(8, 1), LA(9, 1), LA(10, 1), LA(11, 1), LA(12, 1), LA(13, 1), LA(14, 1), LA(15, 1)},
+    { LA(0, 2), LA(1, 2), LA(2, 2), LA(3, 2), LA(4, 2), LA(5, 2), LA(6, 2), LA(7, 2), LA(8, 2), LA(9, 2), LA(10, 2), LA(11, 2), LA(12, 2), LA(13, 2), LA(14, 2), LA(15, 2)},
+    { LA(0, 3), LA(1, 3), LA(2, 3), LA(3, 3), LA(4, 3), LA(5, 3), LA(6, 3), LA(7, 3), LA(8, 3), LA(9, 3), LA(10, 3), LA(11, 3), LA(12, 3), LA(13, 3), LA(14, 3), LA(15, 3)},
+    { LA(0, 4), LA(1, 4), LA(2, 4), LA(3, 4), LA(4, 4), LA(5, 4), LA(6, 4), LA(7, 4), LA(8, 4), LA(9, 4), LA(10, 4), LA(11, 4), LA(12, 4), LA(13, 4), LA(14, 4), LA(15, 4)},
+    { LA(0, 5), LA(1, 5), LA(2, 5), LA(3, 5), LA(4, 5), LA(5, 5), LA(6, 5), LA(7, 5), LA(8, 5), LA(9, 5), LA(10, 5), LA(11, 5), LA(12, 5), LA(13, 5), LA(14, 5), LA(15, 5)},
+    { LA(0, 6), LA(1, 6), LA(2, 6), LA(3, 6), LA(4, 6), LA(5, 6), LA(6, 6), LA(7, 6), LA(8, 6), LA(9, 6), LA(10, 6), LA(11, 6), LA(12, 6), LA(13, 6), LA(14, 6), LA(15, 6)},
+    { LA(0, 7), LA(1, 7), LA(2, 7), LA(3, 7), LA(4, 7), LA(5, 7), LA(6, 7), LA(7, 7), LA(8, 7), LA(9, 7), LA(10, 7), LA(11, 7), LA(12, 7), LA(13, 7), LA(14, 7), LA(15, 7)},
+    { LA(0, 8), LA(1, 8), LA(2, 8), LA(3, 8), LA(4, 8), LA(5, 8), LA(6, 8), LA(7, 8), LA(8, 8), LA(9, 8), LA(10, 8), LA(11, 8), LA(12, 8), LA(13, 8), LA(14, 8), LA(15, 8)},
 };
 
 

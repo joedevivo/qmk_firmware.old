@@ -31,6 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lcd_keyframes.h"
 #include "lcd_backlight_keyframes.h"
 #include "default_animations.h"
+#include "debug.h"
 
 static const uint32_t logo_background_color = LCD_COLOR(0x00, 0x00, 0xFF);
 static const uint32_t initial_color = LCD_COLOR(0, 0, 0);
@@ -113,6 +114,7 @@ static keyframe_animation_t lcd_bitmap_leds_animation = {
 };
 
 void initialize_user_visualizer(visualizer_state_t* state) {
+    dprint("LCD Visualizer Init");
     // The brightness will be dynamically adjustable in the future
     // But for now, change it here.
     lcd_backlight_brightness(130);

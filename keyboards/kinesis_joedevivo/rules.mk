@@ -48,7 +48,7 @@ ARMV = 7
 # Vector table for application
 # 0x00000000-0x00001000 area is occupied by bootlaoder.*/
 # The CORTEX_VTOR... is needed only for MCHCK/Infinity KB
-# OPT_DEFS += -DCORTEX_VTOR_INIT=0x00002000
+OPT_DEFS += -DCORTEX_VTOR_INIT=0x00002000
 
 # Build Options
 #   comment out to disable the options.
@@ -64,24 +64,26 @@ SLEEP_LED_ENABLE = yes # Breathing sleep LED during USB suspend
 NKRO_ENABLE      = yes # USB Nkey Rollover - if this doesn't work, see here: https://github.com/tmk/tmk_keyboard/wiki/FAQ#nkro-doesnt-work
 UNICODE_ENABLE   = yes # Unicode
 
-CUSTOM_MATRIX = yes # Custom matrix file
-
-## SERIAL_LINK is bad for us...
-SERIAL_LINK_ENABLE = no
 VISUALIZER_ENABLE = yes
 LCD_ENABLE = yes
-BACKLIGHT_ENABLE = yes
+BACKLIGHT_ENABLE = yes       # Enable keyboard backlight functionality
 LCD_BACKLIGHT_ENABLE = yes
-MIDI_ENABLE = no
+MIDI_ENABLE = no            # MIDI controls
+AUDIO_ENABLE = no           # Audio output on port C6
 RGBLIGHT_ENABLE = no
 
+DEBUG_ENABLE = yes
 # LCD is one NHD-C12832A1Z-FS(RGB)-FBW-3V
 LCD_DRIVER = st7565
 LCD_WIDTH = 128 
 LCD_HEIGHT = 32
 
 LED_DRIVER = is31fl3731c
-LED_WIDTH = 7 
-LED_HEIGHT = 7
+
+# Adafruit LED Matrix for testing.
+LED_WIDTH = 16 
+LED_HEIGHT = 9
 
 LAYOUTS = kinesis_joedevivo
+
+BLUETOOTH_ENABLE = no       # Enable Bluetooth with the Adafruit EZ-Key HID

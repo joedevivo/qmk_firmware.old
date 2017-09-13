@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KEYBOARDS_ERGODOX_INFINITY_SIMPLE_VISUALIZER_H_
-#define KEYBOARDS_ERGODOX_INFINITY_SIMPLE_VISUALIZER_H_
+#ifndef KEYBOARDS_KINESIS_JOEDEVIVO_SIMPLE_VISUALIZER_H_
+#define KEYBOARDS_KINESIS_JOEDEVIVO_SIMPLE_VISUALIZER_H_
 
 // Currently we are assuming that both the backlight and LCD are enabled
 // But it's entirely possible to write a custom visualizer that use only

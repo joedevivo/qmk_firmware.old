@@ -1,9 +1,18 @@
 #include "kinesis_joedevivo.h"
 #include "ch.h"
 #include "hal.h"
+#include "debug.h"
+#include "serial_link/system/serial_link.h"
 #ifdef VISUALIZER_ENABLE
 #include "lcd_backlight.h"
 #endif
+
+void init_serial_link_hal(void) {
+    PORTA->PCR[1] = PORTx_PCRn_PE | PORTx_PCRn_PS | PORTx_PCRn_PFE | PORTx_PCRn_MUX(2);
+    PORTA->PCR[2] = PORTx_PCRn_DSE | PORTx_PCRn_SRE | PORTx_PCRn_MUX(2);
+    PORTE->PCR[0] = PORTx_PCRn_PE | PORTx_PCRn_PS | PORTx_PCRn_PFE | PORTx_PCRn_MUX(3);
+    PORTE->PCR[1] = PORTx_PCRn_DSE | PORTx_PCRn_SRE | PORTx_PCRn_MUX(3);
+}
 
 #define RED_PIN 1
 #define GREEN_PIN 2
@@ -31,9 +40,10 @@
 // Which will reduce the brightness range
 #define PRESCALAR_DEFINE 0
 void lcd_backlight_hal_init(void) {
+	dprint("LCD Hal Backlight Init");
 	// Setup Backlight
-    SIM->SCGC6 |= SIM_SCGC6_FTM0;
-    FTM0->CNT = 0; // Reset counter
+  SIM->SCGC6 |= SIM_SCGC6_FTM0;
+  FTM0->CNT = 0; // Reset counter
 
 	// PWM Period
 	// 16-bit maximum
@@ -103,7 +113,7 @@ void matrix_scan_user(void) {
 void matrix_init_kb(void) {
 	// put your keyboard start-up code here
 	// runs once when the firmware starts up
-
+	dprint("matrix_init_kb\n");
 	matrix_init_user();
 	// The backlight always has to be initialized, otherwise it will stay lit
 #ifndef VISUALIZER_ENABLE
@@ -114,7 +124,6 @@ void matrix_init_kb(void) {
 void matrix_scan_kb(void) {
 	// put your looping keyboard code here
 	// runs every cycle (a lot)
-
 	matrix_scan_user();
 }
 
