@@ -3,6 +3,8 @@
 #include "action_layer.h"
 #include "version.h"
 
+#define TAPPING_TOGGLE 1
+
 //One Shot Modifiers
 #define OSM_LCTL OSM(MOD_LCTL)
 #define OSM_LALT OSM(MOD_LALT)
@@ -11,36 +13,36 @@
 #define XXXXXX KC_NO
 #define ______ KC_TRANSPARENT
 
-#define BASE 0 // default layer
-#define SYMB 1 // symbols
-#define MDIA 2 // media keys
+// Layers
+enum {
+  _QWERTY,
+  _RAISE,
+  _MOVE
+};
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
   EPRM,
   VRSN,
-  RGB_SLD,
-  QWERTY,
-  COLEMAK
+  RGB_SLD
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-/* Keymap 0: Basic layer
- *  Kinesis style thumb clusters, becaus that's what I'm used to.
+/* QWERTY Base Layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * |   =    |   1  |   2  |   3  |   4  |   5  |      |           |      |   6  |   7  |   8  |   9  |   0  |   -    |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Del    |   Q  |   W  |   E  |   R  |   T  |      |           |      |   Y  |   U  |   I  |   O  |   P  |   \    |
+ * | Tab    |   Q  |   W  |   E  |   R  |   T  |      |           |      |   Y  |   U  |   I  |   O  |   P  |   \    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | Ctrl   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |;/MDIA|' / Cmd |
+ * | LCtl   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |   ;  |   '    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | LShift |Z/Ctrl|   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |//Ctrl| RShift |
+ * | LShift |Z/Alt |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |//Alt | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   | ~L1  |  `~  |  '"  | Left | Right|                                       |  Up  | Down |   [  |   ]  | ~L1  |
+ *   |      |  `~  |  Meh | Left | Right|                                       |  Up  | Down |   [  |   ]  | Raise|
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        |⌘/Esc| Alt  |       | Ctrl | ⌘    |
+ *                                        |⌘/Esc| Alt   |       | Ctrl | ⌘    |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      |      | Home |       | PgUp |        |      |
  *                                 |Backsp| Del  |------|       |------|  Enter |Space |
@@ -49,27 +51,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
-[BASE] = KEYMAP(  // layer 0 : default
+[_QWERTY] = KEYMAP(  // layer 0 : default
         // left hand
         KC_EQL,    KC_1,        KC_2,    KC_3,    KC_4,   KC_5,   XXXXXX,
         KC_TAB,    KC_Q,        KC_W,    KC_E,    KC_R,   KC_T,   XXXXXX,
         OSM_LCTL,  KC_A,        KC_S,    KC_D,    KC_F,   KC_G,
-        OSM_LSFT,  CTL_T(KC_Z), KC_X,    KC_C,    KC_V,   KC_B,   XXXXXX,
-        MO(SYMB),  KC_GRV,      KC_QUOT, KC_LEFT, KC_RGHT,
+        OSM_LSFT,  ALT_T(KC_Z), KC_X,    KC_C,    KC_V,   KC_B,   XXXXXX,
+        XXXXXX,    KC_GRV,      KC_MEH,  KC_LEFT, KC_RGHT,
                                                     LGUI_T(KC_ESC), OSM_LALT,
                                                                      KC_HOME,
                                                 KC_BSPACE, KC_DELETE, KC_END,
         // right hand
              XXXXXX,  KC_6,   KC_7,  KC_8,   KC_9,   KC_0,             KC_MINS,
              XXXXXX,  KC_Y,   KC_U,  KC_I,   KC_O,   KC_P,             KC_BSLS,
-                      KC_H,   KC_J,  KC_K,   KC_L,   LT(MDIA, KC_SCLN),GUI_T(KC_QUOT),
-             XXXXXX,  KC_N,   KC_M,  KC_COMM,KC_DOT, CTL_T(KC_SLSH),   OSM_LSFT,
-                              KC_UP, KC_DOWN,KC_LBRC,KC_RBRC,          MO(SYMB),
+                      KC_H,   KC_J,  KC_K,   KC_L,   KC_SCLN,          KC_QUOT,
+             XXXXXX,  KC_N,   KC_M,  KC_COMM,KC_DOT, ALT_T(KC_SLSH),   OSM_LSFT,
+                              KC_UP, KC_DOWN,KC_LBRC,KC_RBRC,          TT(_RAISE),
              KC_LCTL, KC_LGUI,
              KC_PGUP,
              KC_PGDOWN, KC_ENTER, KC_SPACE
     ),
-/* Keymap 1: Symbol Layer
+/* RISE_UP!
  *
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |Version  |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |  F10 |   F11  |
@@ -80,36 +82,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |         |   %  |   ^  |   [  |   ]  |   ~  |      |           |      |   &  |   1  |   2  |   3  |   \  |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   | EPRM  |      |      |      |      |                                       |      |    . |   0  |   =  |      |
+ *   |       |      |      |      |      |                                       |      |    . |   0  |   =  |      |
  *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        |Animat|      |       |Toggle|Solid |
+ *                                        |Animat| EPRM |       |Toggle|Solid |
  *                                 ,------|------|------|       |------+------+------.
  *                                 |Bright|Bright|      |       |      |Hue-  |Hue+  |
  *                                 |ness- |ness+ |------|       |------|      |      |
  *                                 |      |      |      |       |      |      |      |
  *                                 `--------------------'       `--------------------'
  */
-// SYMBOLS
-[SYMB] = KEYMAP(
+
+[_RAISE] = KEYMAP(
        // left hand
-       VRSN,   KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_TRNS,
-       KC_TRNS,KC_EXLM,KC_AT,  KC_LCBR,KC_RCBR,KC_PIPE,KC_TRNS,
-       KC_TRNS,KC_HASH,KC_DLR, KC_LPRN,KC_RPRN,KC_GRV,
-       KC_TRNS,KC_PERC,KC_CIRC,KC_LBRC,KC_RBRC,KC_TILD,KC_TRNS,
-          EPRM,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
+       VRSN,        KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   XXXXXX,
+       XXXXXX,      KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE, XXXXXX,
+       XXXXXX,      KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,
+       XXXXXX,      KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD, XXXXXX,
+       TO(_QWERTY), XXXXXX,  XXXXXX,  XXXXXX,  XXXXXX,
                                        RGB_MOD,   EPRM,
-                                               KC_TRNS,
-                               RGB_VAD,RGB_VAI,KC_TRNS,
+                                                XXXXXX,
+                                RGB_VAD,RGB_VAI,XXXXXX,
        // right hand
-       KC_TRNS, KC_F6,   KC_F7,  KC_F8,   KC_F9,   KC_F10,  KC_F11,
-       KC_TRNS, KC_UP,   KC_7,   KC_8,    KC_9,    KC_ASTR, KC_F12,
-                KC_DOWN, KC_4,   KC_5,    KC_6,    KC_PLUS, KC_TRNS,
-       KC_TRNS, KC_AMPR, KC_1,   KC_2,    KC_3,    KC_BSLS, KC_TRNS,
-                         KC_TRNS,KC_DOT,  KC_0,    KC_EQL,  KC_TRNS,
+       XXXXXX, KC_F6,   KC_F7,  KC_F8,   KC_F9,   KC_F10,  KC_F11,
+       XXXXXX, KC_UP,   KC_7,   KC_8,    KC_9,    KC_ASTR, KC_F12,
+               KC_DOWN, KC_4,   KC_5,    KC_6,    KC_PLUS, XXXXXX,
+       XXXXXX, KC_AMPR, KC_1,   KC_2,    KC_3,    KC_BSLS, XXXXXX,
+                         XXXXXX,KC_DOT,  KC_0,    KC_EQL,  TO(_MOVE),
        RGB_TOG, RGB_SLD,
-       KC_TRNS,
-       KC_TRNS, RGB_HUD, RGB_HUI
+       XXXXXX,
+       XXXXXX, RGB_HUD, RGB_HUI
 ),
 /* Keymap 2: Media and mouse keys
  *
@@ -133,29 +135,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 `--------------------'       `--------------------'
  */
 // MEDIA AND MOUSE
-[MDIA] = KEYMAP(
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_U, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_BTN1, KC_BTN2,
-                                           KC_TRNS, KC_TRNS,
-                                                    KC_TRNS,
-                                  KC_TRNS, KC_TRNS, KC_TRNS,
+[_MOVE] = KEYMAP(
+       XXXXXX,     XXXXXX, XXXXXX,  XXXXXX,  XXXXXX,  XXXXXX, XXXXXX,
+       XXXXXX,     XXXXXX, KC_BTN1, KC_MS_U, KC_BTN2, XXXXXX, XXXXXX,
+       XXXXXX,     XXXXXX, KC_MS_L, KC_BTN3, KC_MS_R, XXXXXX,
+       XXXXXX,     XXXXXX, XXXXXX,  KC_MS_D, XXXXXX,  XXXXXX, XXXXXX,
+       TO(_RAISE), XXXXXX, XXXXXX,  XXXXXXX, XXXXXX,
+                                            XXXXXX, XXXXXX,
+                                                    XXXXXX,
+                                    XXXXXX, XXXXXX, XXXXXX,
     // right hand
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MPLY,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_MPRV, KC_MNXT, KC_TRNS, KC_TRNS,
-                          KC_VOLU, KC_VOLD, KC_MUTE, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS,
-       KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_WBAK
+       XXXXXX,  XXXXXX, XXXXXX, XXXXXX,  XXXXXX,  XXXXXX, XXXXXX,
+       XXXXXX,  XXXXXX, XXXXXX, XXXXXX,  XXXXXX,  XXXXXX, XXXXXX,
+                XXXXXX, XXXXXX, XXXXXX,  XXXXXX,  XXXXXX, KC_MPLY,
+       XXXXXX,  XXXXXX, XXXXXX, KC_MPRV, KC_MNXT, XXXXXX, XXXXXX,
+                       KC_VOLU, KC_VOLD, KC_MUTE, XXXXXX, XXXXXX,
+       XXXXXX, XXXXXX,
+       XXXXXX,
+       XXXXXX, XXXXXX, KC_WBAK
 ),
 };
 
 const uint16_t PROGMEM fn_actions[] = {
-    [1] = ACTION_LAYER_TAP_TOGGLE(SYMB)                // FN1 - Momentary Layer 1 (Symbols)
+    //[1] = ACTION_LAYER_TAP_TOGGLE(SYMB)                // FN1 - Momentary Layer 1 (Symbols)
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
@@ -203,21 +205,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         #endif
       }
       return false;
-      break;
-    case QWERTY:
-      if (record->event.pressed) {
-        persistant_default_layer_set(1UL<<BASE);
-      }
-      return false;
-      break;
   }
   return true;
 }
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
-
+  startup_user();
 };
+
+void startup_user(void) {
+  layer_on(_QWERTY);
+}
 
 void binary_lights(uint8_t number) {
   ergodox_board_led_off();
@@ -254,33 +253,14 @@ void binary_lights(uint8_t number) {
       ergodox_right_led_3_on();
       break;
     default:
-      //ergodox_blink_all_leds();
-      //ergodox_blink_all_leds();
+      ergodox_blink_all_leds();
+      ergodox_blink_all_leds();
       break;
   }
 }
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
-
     uint8_t layer = biton32(layer_state);
     binary_lights(layer);
-    /*
-    ergodox_board_led_off();
-    ergodox_right_led_1_off();
-    ergodox_right_led_2_off();
-    ergodox_right_led_3_off();
-    switch (layer) {
-      // TODO: Make this relevant to the ErgoDox EZ.
-        case 1:
-            ergodox_right_led_1_on();
-            break;
-        case 2:
-            ergodox_right_led_2_on();
-            break;
-        default:
-            // none
-            break;
-    }
-    */
 };
