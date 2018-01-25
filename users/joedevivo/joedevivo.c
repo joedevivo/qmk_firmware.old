@@ -1,5 +1,20 @@
 #include "joedevivo.h"
 
+#ifdef AUDIO_ENABLE
+float tone_startup[][2] = {
+  {NOTE_B5, 20},
+  {NOTE_B6, 8},
+  {NOTE_DS6, 20},
+  {NOTE_B6, 8}
+};
+
+float tone_qwerty[][2]  = SONG(QWERTY_SOUND);
+
+float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
+
+float music_scale[][2]  = SONG(MUSIC_SCALE_SOUND);
+#endif
+
 // Add reconfigurable functions here, for keymap customization
 // This allows for a global, userspace functions, and continued
 // customization of the keymap.  Use _keymap instead of _user
@@ -19,6 +34,9 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
 // call the keymap's init function
 void matrix_init_user(void) {
   layer_on(_QWERTY);
+#ifdef AUDIO_ENABLE
+  startup_user();
+#endif
   matrix_init_keymap();
 }
 
@@ -36,6 +54,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case QWERTY:
       if (record->event.pressed) {
         set_single_persistent_default_layer(_QWERTY);
+#ifdef AUDIO_ENABLE
+          stop_all_notes();
+          PLAY_SONG(tone_qwerty);
+#endif
       }
       return false;
       break;
@@ -76,3 +98,34 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+//Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [TD_SPC_ENT]  = ACTION_TAP_DANCE_DOUBLE(KC_SPC, KC_ENT)
+};
+
+
+#ifdef AUDIO_ENABLE
+void startup_user()
+{
+  _delay_ms(20); // gets rid of tick
+  PLAY_SONG(tone_startup);
+}
+
+void shutdown_user()
+{
+  PLAY_SONG(tone_goodbye);
+  _delay_ms(150);
+  stop_all_notes();
+}
+
+void music_on_user(void)
+{
+  music_scale_user();
+}
+
+void music_scale_user(void)
+{
+  PLAY_SONG(music_scale);
+}
+#endif

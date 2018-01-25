@@ -5,6 +5,10 @@
 
 #include "version.h"
 
+#ifdef AUDIO_ENABLE
+  #include "audio.h"
+#endif
+
 enum planck_layers {
   _QWERTY,
   _LOWER,
@@ -20,6 +24,10 @@ enum userspace_custom_keycodes {
   VRSN,
   EPRM,
   NEW_SAFE_RANGE
+};
+
+enum tap_dance_declarations {
+  TD_SPC_ENT = 0
 };
 
 // Fillers to make layering more clear
