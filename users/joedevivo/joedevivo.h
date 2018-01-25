@@ -5,6 +5,12 @@
 
 #include "version.h"
 
+#ifdef AUDIO_ENABLE
+  #include "audio.h"
+#endif
+
+#define TAPPING_TERM 150
+
 enum planck_layers {
   _QWERTY,
   _LOWER,
@@ -20,6 +26,10 @@ enum userspace_custom_keycodes {
   VRSN,
   EPRM,
   NEW_SAFE_RANGE
+};
+
+enum tap_dance_declarations {
+  TD_SPC_ENT = 0
 };
 
 // Fillers to make layering more clear
@@ -47,5 +57,11 @@ enum userspace_custom_keycodes {
 #define OSM_LCTL OSM(MOD_LCTL)
 #define OSM_LALT OSM(MOD_LALT)
 #define OSM_LSFT OSM(MOD_LSFT)
+
+// 4-way thumbkins!
+#define LTHUMBI LT(_LOWER,  KC_BSPC)
+#define LTHUMBO LT(_ADJUST, KC_DEL)
+#define RTHUMBO KC_ENT
+#define RTHUMBI LT(_RAISE,  KC_SPC)
 
 #endif
