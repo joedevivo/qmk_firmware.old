@@ -101,7 +101,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 //Tap Dance Definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
-  [TD_SPC_ENT]  = ACTION_TAP_DANCE_DOUBLE(KC_SPC, KC_ENT)
+  [TD_SPC_ENT]    = ACTION_TAP_DANCE_DOUBLE(KC_SPC, KC_ENT),
+  [TD_SHIFT_ENT]  = ACTION_TAP_DANCE_DOUBLE(KC_RSFT, KC_ENT)
 };
 
 

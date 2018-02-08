@@ -29,7 +29,8 @@ enum userspace_custom_keycodes {
 };
 
 enum tap_dance_declarations {
-  TD_SPC_ENT = 0
+  TD_SPC_ENT = 0,
+  TD_SHIFT_ENT
 };
 
 // Fillers to make layering more clear
@@ -50,7 +51,8 @@ enum tap_dance_declarations {
 
 // For Readability
 #define CTL_ESC MT(MOD_LCTL, KC_ESC)
-#define SFT_ENT MT(MOD_LSFT, KC_ENT)
+//#define SFT_ENT MT(MOD_LSFT, KC_ENT)
+#define SFT_ENT TD(TD_SHIFT_ENT)
 #define SPC_ENT TD(TD_SPC_ENT)
 
 //One Shot Modifiers
