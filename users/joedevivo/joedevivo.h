@@ -9,12 +9,16 @@
   #include "audio.h"
 #endif
 
-#define TAPPING_TERM 150
+#ifndef TAPPING_TERM
+  #define TAPPING_TERM 150
+#endif
 
 enum planck_layers {
   _QWERTY,
   _LOWER,
   _RAISE,
+  _FN,
+  _MOUSE,
   _ADJUST
 };
 
@@ -66,4 +70,5 @@ enum tap_dance_declarations {
 #define RTHUMBO KC_ENT
 #define RTHUMBI LT(_RAISE,  KC_SPC)
 
+#define MOUSED LT(_MOUSE, KC_D)
 #endif
