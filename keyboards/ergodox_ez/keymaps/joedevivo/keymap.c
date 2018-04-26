@@ -33,7 +33,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
-[_QWERTY] = KEYMAP(
+[_QWERTY] = LAYOUT_ergodox(
     // left hand
     KC_EQL,   KC_1,        KC_2,    KC_3,    KC_4,   KC_5,   XXXXXX,
     KC_TAB,   KC_Q,        KC_W,    KC_E,    KC_R,   KC_T,   KC_TAB,
@@ -76,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 `--------------------'       `--------------------'
  */
 
-[_LOWER] = KEYMAP(
+[_LOWER] = LAYOUT_ergodox(
     // left hand
     _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   XXXXXX,
     KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, XXXXXX,
@@ -116,7 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 |      |      |      |       |      |      |      |
  *                                 `--------------------'       `--------------------'
  */
-[_RAISE] = KEYMAP(
+[_RAISE] = LAYOUT_ergodox(
     // left hand
     _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   XXXXXX,
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    XXXXXX,
@@ -241,7 +241,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 |      |      |      |       |      |      |      |
  *                                 `--------------------'       `--------------------'
  */
-[_ADJUST] = KEYMAP(
+[_ADJUST] = LAYOUT_ergodox(
     // left hand
     X,    RGB_M_P,RGB_M_B,RGB_M_R,RGB_M_SW,RGB_M_SN, X,
     VRSN, RESET, RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD,
