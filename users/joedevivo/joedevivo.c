@@ -54,6 +54,9 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
 // Call user matrix init, then
 // call the keymap's init function
 void matrix_init_user(void) {
+#ifdef RGBLIGHT_ENABLE
+  RGB_current_mode = rgblight_config.mode;
+#endif
   layer_on(_QWERTY);
 #ifdef AUDIO_ENABLE
   startup_user();
@@ -164,6 +167,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
       break;
 #endif
+    case RGBRST:
+      #ifdef RGBLIGHT_ENABLE
+        if (record->event.pressed) {
+          eeconfig_update_rgblight_default();
+          rgblight_enable();
+          RGB_current_mode = rgblight_config.mode;
+        }
+      #endif
+      break;
   }
   return process_record_keymap(keycode, record);
 }
