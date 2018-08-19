@@ -29,6 +29,8 @@ enum userspace_custom_keycodes {
   ADJUST,
   VRSN,
   EPRM,
+  RGBRST,
+  BACKLIT,
   NEW_SAFE_RANGE
 };
 
@@ -64,6 +66,7 @@ enum tap_dance_declarations {
 #define OSM_LALT OSM(MOD_LALT)
 #define OSM_LSFT OSM(MOD_LSFT)
 
+#define SPCMAC ALT(M)
 /**
  * 4-way thumbkins!
  *
