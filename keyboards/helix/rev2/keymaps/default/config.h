@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef CONFIG_USER_H
 #define CONFIG_USER_H
-
+#define SSD1306OLED
 // if you need more program area, try uncomment follow line
 //#include "serial_config_simpleapi.h"
 

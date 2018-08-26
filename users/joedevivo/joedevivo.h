@@ -66,7 +66,7 @@ enum tap_dance_declarations {
 #define OSM_LALT OSM(MOD_LALT)
 #define OSM_LSFT OSM(MOD_LSFT)
 
-#define SPCMAC ALT(M)
+#define SPCMAC LALT(KC_M)
 /**
  * 4-way thumbkins!
  *
@@ -79,8 +79,5 @@ enum tap_dance_declarations {
 #define RTHUMBI LT(_RAISE,  KC_SPC)
 
 #define MOUSED LT(_MOUSE, KC_D)
-
-#define SPCMCS LALT(KC_M)
-
 
 #endif
