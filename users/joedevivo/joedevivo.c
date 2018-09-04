@@ -105,7 +105,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         } else {
           TOG_STATUS = !TOG_STATUS;
 #ifdef RGBLIGHT_ENABLE
-          rgblight_mode(16);
+          rgblight_mode(25);
 #endif
         }
         layer_on(_LOWER);
@@ -128,7 +128,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         } else {
           TOG_STATUS = !TOG_STATUS;
 #ifdef RGBLIGHT_ENABLE
-          rgblight_mode(16);
+          rgblight_mode(34);
 #endif
         }
         layer_on(_RAISE);
