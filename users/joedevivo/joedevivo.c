@@ -1,5 +1,5 @@
 #include "joedevivo.h"
-
+#include "wait.h"
 extern keymap_config_t keymap_config;
 
 #ifdef RGBLIGHT_ENABLE
@@ -51,6 +51,15 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
+__attribute__ ((weak))
+bool music_mask_keymap(uint16_t keycode) {
+  return true;
+}
+
+bool music_mask_user(uint16_t keycode) {
+  return music_mask_keymap(keycode);
+}
+
 // Call user matrix init, then
 // call the keymap's init function
 void matrix_init_user(void) {
@@ -70,16 +79,31 @@ void matrix_scan_user(void) {
   matrix_scan_keymap();
 }
 
-// Setting ADJUST layer RGB back to default
-void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
-  if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) {
+uint32_t layer_state_set_user(uint32_t state) {
+  switch (biton32(state)) {
+    case _RAISE:
 #ifdef RGBLIGHT_ENABLE
-    rgblight_mode(RGB_current_mode);
+      rgblight_mode(34);
 #endif
-    layer_on(layer3);
-  } else {
-    layer_off(layer3);
-  }
+      break;
+    case _LOWER:
+#ifdef RGBLIGHT_ENABLE
+      rgblight_mode(34);
+#endif
+        break;
+    case _ADJUST:
+#ifdef RGBLIGHT_ENABLE
+      rgblight_setrgb (0x7A,  0x00, 0xFF);
+#endif
+      break;
+    default: //  for any other layers, or the default layer
+#ifdef RGBLIGHT_ENABLE
+      rgblight_mode(RGB_current_mode);
+      #rgblight_setrgb (0x00,  0xFF, 0xFF);
+#endif
+      break;
+    }
+  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -94,60 +118,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           stop_all_notes();
           PLAY_SONG(tone_qwerty);
 #endif
-      }
-      return false;
-      break;
-    case LOWER:
-      if (record->event.pressed) {
-        //not sure how to have keyboard check mode and set it to a variable, so my work around
-        //uses another variable that would be set to true after the first time a reactive key is pressed.
-        if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false
-        } else {
-          TOG_STATUS = !TOG_STATUS;
-#ifdef RGBLIGHT_ENABLE
-          rgblight_mode(25);
-#endif
-        }
-        layer_on(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      } else {
-#ifdef RGBLIGHT_ENABLE
-        rgblight_mode(RGB_current_mode);   // revert RGB to initial mode prior to RGB mode change
-#endif
-        TOG_STATUS = false;
-        layer_off(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        //not sure how to have keyboard check mode and set it to a variable, so my work around
-        //uses another variable that would be set to true after the first time a reactive key is pressed.
-        if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false
-        } else {
-          TOG_STATUS = !TOG_STATUS;
-#ifdef RGBLIGHT_ENABLE
-          rgblight_mode(34);
-#endif
-        }
-        layer_on(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      } else {
-#ifdef RGBLIGHT_ENABLE
-        rgblight_mode(RGB_current_mode);   // revert RGB to initial mode prior to RGB mode change
-#endif
-        TOG_STATUS = false;
-        layer_off(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case ADJUST:
-      if (record->event.pressed) {
-        layer_on(_ADJUST);
-      } else {
-        layer_off(_ADJUST);
       }
       return false;
       break;
@@ -176,6 +146,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       #endif
       break;
+    case BACKLIT:
+      if (record->event.pressed) {
+        register_code(KC_RSFT);
+        #ifdef BACKLIGHT_ENABLE
+          backlight_step();
+        #endif
+        #ifdef KEYBOARD_planck_rev5
+          PORTE &= ~(1<<6);
+        #endif
+      } else {
+        unregister_code(KC_RSFT);
+        #ifdef KEYBOARD_planck_rev5
+          PORTE |= (1<<6);
+        #endif
+      }
+      return false;
+      break;
   }
   return process_record_keymap(keycode, record);
 }
@@ -190,14 +177,14 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #ifdef AUDIO_ENABLE
 void startup_user()
 {
-  _delay_ms(20); // gets rid of tick
+  wait_ms(20); // gets rid of tick
   PLAY_SONG(tone_startup);
 }
 
 void shutdown_user()
 {
   PLAY_SONG(tone_goodbye);
-  _delay_ms(150);
+  wait_ms(150);
   stop_all_notes();
 }
 
