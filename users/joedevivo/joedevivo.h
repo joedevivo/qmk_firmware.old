@@ -24,8 +24,6 @@ enum planck_layers {
 
 enum userspace_custom_keycodes {
   QWERTY = SAFE_RANGE,
-  LOWER,
-  RAISE,
   ADJUST,
   VRSN,
   EPRM,
@@ -79,5 +77,9 @@ enum tap_dance_declarations {
 #define RTHUMBI LT(_RAISE,  KC_SPC)
 
 #define MOUSED LT(_MOUSE, KC_D)
+
+#define LOWER MO(_LOWER)
+#define RAISE MO(_RAISE)
+
 
 #endif

@@ -99,7 +99,7 @@ uint32_t layer_state_set_user(uint32_t state) {
     default: //  for any other layers, or the default layer
 #ifdef RGBLIGHT_ENABLE
       rgblight_mode(RGB_current_mode);
-      #rgblight_setrgb (0x00,  0xFF, 0xFF);
+      rgblight_setrgb (0x00,  0xFF, 0xFF);
 #endif
       break;
     }
