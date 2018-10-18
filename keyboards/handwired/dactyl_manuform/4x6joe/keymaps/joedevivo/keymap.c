@@ -1,5 +1,5 @@
 #include QMK_KEYBOARD_H
-#include "4x6.h"
+#include "4x6joe.h"
 #include "joedevivo.h"
 extern keymap_config_t keymap_config;
 extern uint8_t is_master;
