@@ -15,5 +15,5 @@
  */
 
 #pragma once
-
+#undef BACKLIGHT_BREATHING
 // place overrides here
