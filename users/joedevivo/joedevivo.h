@@ -19,6 +19,7 @@ enum planck_layers {
   _RAISE,
   _FN,
   _MOUSE,
+  _ARROWD,
   _ADJUST
 };
 
@@ -77,7 +78,7 @@ enum tap_dance_declarations {
 #define RTHUMBI LT(_RAISE,  KC_SPC)
 
 #define MOUSED LT(_MOUSE, KC_D)
-
+#define ARROWF LT(_ARROWD, KC_F)
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
