@@ -6,9 +6,6 @@
 #include "lufa.h"
 #include "split_util.h"
 #endif
-#ifdef AUDIO_ENABLE
-  #include "audio.h"
-#endif
 #ifdef SSD1306OLED
   #include "ssd1306.h"
 #endif
@@ -71,121 +68,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
 )
 };
-/*
-void persistent_default_layer_set(uint16_t default_layer) {
-  eeconfig_update_default_layer(default_layer);
-  default_layer_set(default_layer);
-}
-
-// Setting ADJUST layer RGB back to default
-void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
-  if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) {
-    #ifdef RGBLIGHT_ENABLE
-      //rgblight_mode(RGB_current_mode);
-    #endif
-    layer_on(layer3);
-  } else {
-    layer_off(layer3);
-  }
-}
-
-bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case QWERTY:
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-          PLAY_SONG(tone_qwerty);
-        #endif
-        persistent_default_layer_set(1UL<<_QWERTY);
-      }
-      return false;
-      break;
-    case LOWER:
-      if (record->event.pressed) {
-          //not sure how to have keyboard check mode and set it to a variable, so my work around
-          //uses another variable that would be set to true after the first time a reactive key is pressed.
-        if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false
-        } else {
-          TOG_STATUS = !TOG_STATUS;
-          #ifdef RGBLIGHT_ENABLE
-            //rgblight_mode(RGBLIGHT_MODE_SNAKE + 1);
-          #endif
-        }
-        layer_on(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      } else {
-        #ifdef RGBLIGHT_ENABLE
-          //rgblight_mode(RGB_current_mode);   // revert RGB to initial mode prior to RGB mode change
-        #endif
-        TOG_STATUS = false;
-        layer_off(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        //not sure how to have keyboard check mode and set it to a variable, so my work around
-        //uses another variable that would be set to true after the first time a reactive key is pressed.
-        if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false
-        } else {
-          TOG_STATUS = !TOG_STATUS;
-          #ifdef RGBLIGHT_ENABLE
-            //rgblight_mode(RGBLIGHT_MODE_SNAKE);
-          #endif
-        }
-        layer_on(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      } else {
-        #ifdef RGBLIGHT_ENABLE
-          //rgblight_mode(RGB_current_mode);  // revert RGB to initial mode prior to RGB mode change
-        #endif
-        layer_off(_RAISE);
-        TOG_STATUS = false;
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case ADJUST:
-        if (record->event.pressed) {
-          layer_on(_ADJUST);
-        } else {
-          layer_off(_ADJUST);
-        }
-        return false;
-        break;
-      //led operations - RGB mode change now updates the RGB_current_mode to allow the right RGB mode to be set after reactive keys are released
-    case RGB_MOD:
-      #ifdef RGBLIGHT_ENABLE
-        if (record->event.pressed) {
-          rgblight_mode(RGB_current_mode);
-          rgblight_step();
-          RGB_current_mode = rgblight_config.mode;
-        }
-      #endif
-      return false;
-      break;
-    case RGBRST:
-      #ifdef RGBLIGHT_ENABLE
-        if (record->event.pressed) {
-          eeconfig_update_rgblight_default();
-          rgblight_enable();
-          RGB_current_mode = rgblight_config.mode;
-        }
-      #endif
-      break;
-  }
-  return true;
-}
-*/
 void matrix_init_keymap(void) {
-    #ifdef AUDIO_ENABLE
-        startup_user();
-    #endif
-    #ifdef RGBLIGHT_ENABLE
-    //  RGB_current_mode = rgblight_config.mode;
-    #endif
-    //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
+//SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
     #ifdef SSD1306OLED
         iota_gfx_init(!has_usb());   // turns on the display
     #endif
@@ -206,25 +90,17 @@ void matrix_update(struct CharacterMatrix *dest,
   }
 }
 
-//assign the right code to your layers for OLED display
-#define L_BASE 1
-#define L_LOWER 3
-#define L_RAISE 5
-#define L_ADJUST (1<<_ADJUST)
-#define L_ADJUST_TRI 71//(L_ADJUST|L_RAISE|L_LOWER)
-
-static void render_logo(struct CharacterMatrix *matrix) {
-
-//  static char logo[]={
-//    0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8a,0x8b,0x8c,0x8d,0x8e,0x8f,0x90,0x91,0x92,0x93,0x94,
-//    0xa0,0xa1,0xa2,0xa3,0xa4,0xa5,0xa6,0xa7,0xa8,0xa9,0xaa,0xab,0xac,0xad,0xae,0xaf,0xb0,0xb1,0xb2,0xb3,0xb4,
-//    0xc0,0xc1,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xcb,0xcc,0xcd,0xce,0xcf,0xd0,0xd1,0xd2,0xd3,0xd4,
-//    0};
-//  matrix_write(matrix, logo);
+//static void render_logo(struct CharacterMatrix *matrix) {}
+/*
+  static char logo[]={
+    0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8a,0x8b,0x8c,0x8d,0x8e,0x8f,0x90,0x91,0x92,0x93,0x94,
+    0xa0,0xa1,0xa2,0xa3,0xa4,0xa5,0xa6,0xa7,0xa8,0xa9,0xaa,0xab,0xac,0xad,0xae,0xaf,0xb0,0xb1,0xb2,0xb3,0xb4,
+    0xc0,0xc1,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xcb,0xcc,0xcd,0xce,0xcf,0xd0,0xd1,0xd2,0xd3,0xd4,
+    0};
+  matrix_write(matrix, logo);
   //matrix_write_P(&matrix, PSTR(" Split keyboard kit"));
 }
-
-
+*/
 
 void render_status(struct CharacterMatrix *matrix) {
 
@@ -245,18 +121,23 @@ void render_status(struct CharacterMatrix *matrix) {
   snprintf(buf,sizeof(buf), "Undef-%ld", layer_state);
   matrix_write_P(matrix, PSTR("\nLayer: "));
     switch (layer_state) {
-        case L_BASE:
+        case 1:
            matrix_write_P(matrix, PSTR("Default"));
            break;
-        case L_RAISE:
+        case 5:
            matrix_write_P(matrix, PSTR("Raise"));
            break;
-        case L_LOWER:
+        case 3:
            matrix_write_P(matrix, PSTR("Lower"));
            break;
-        case L_ADJUST:
-        case L_ADJUST_TRI:
+        case 71:
            matrix_write_P(matrix, PSTR("Adjust"));
+           break;
+        case 17:
+           matrix_write_P(matrix, PSTR("Mouse"));
+           break;
+        case 33:
+           matrix_write_P(matrix, PSTR("ARROW'D!!!"));
            break;
         default:
            matrix_write(matrix, buf);
@@ -270,8 +151,6 @@ void render_status(struct CharacterMatrix *matrix) {
             (host_keyboard_leds() & (1<<USB_LED_SCROLL_LOCK)) ? "SCLK" : "    ");
   matrix_write(matrix, led);
 }
-
-
 void iota_gfx_task_user(void) {
   struct CharacterMatrix matrix;
 
@@ -284,10 +163,7 @@ void iota_gfx_task_user(void) {
   matrix_clear(&matrix);
   if(is_master){
     render_status(&matrix);
-  }else{
-    render_logo(&matrix);
   }
   matrix_update(&display, &matrix);
 }
-
 #endif

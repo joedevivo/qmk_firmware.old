@@ -73,3 +73,5 @@ enum userspace_custom_keycodes {
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
+
+uint32_t layer_state_set_rgb(uint32_t state);

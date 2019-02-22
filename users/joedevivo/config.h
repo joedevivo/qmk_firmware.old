@@ -5,9 +5,9 @@
   #define STARTUP_SONG SONG(IMPERIAL_MARCH)
   #define GOODBYE_SONG  SONG(SONIC_RING)
   #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), \
-                                    SONG(COLEMAK_SOUND), \
-                                    SONG(DVORAK_SOUND), \
-                                    SONG(OVERWATCH_THEME) \
+                                SONG(COLEMAK_SOUND), \
+                                SONG(DVORAK_SOUND), \
+                                SONG(OVERWATCH_THEME) \
                                   }
 
   #define AUDIO_CLICKY_FREQ_RANDOMNESS 1.5f
