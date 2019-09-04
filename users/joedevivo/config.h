@@ -23,7 +23,8 @@
 #define UNICODE_SONG_WINC SONG(RICK_ROLL)
 
 #endif // !AUDIO_ENABLE
-
+// TODO: What's up with tapping_term?
+/*
 #ifdef TAPPING_TERM
   #undef TAPPING_TERM
 #endif // TAPPING_TERM
@@ -32,7 +33,7 @@
 #else
   #define TAPPING_TERM 150
 #endif
-
+*/
 #ifdef RGBLIGHT_ANIMATIONS
   #undef RGBLIGHT_ANIMATIONS
 #endif // RGBLIGHT_ANIMATIONS
