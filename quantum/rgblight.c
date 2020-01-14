@@ -189,7 +189,6 @@ void rgblight_init(void) {
         return;
     }
 
-    debug_enable = 1;  // Debug ON!
     dprintf("rgblight_init called.\n");
     dprintf("rgblight_init start!\n");
     if (!eeconfig_is_enabled()) {
@@ -612,6 +611,7 @@ void rgblight_set(void) {
 #    endif
         }
     }
+
 #    ifdef RGBLIGHT_LED_MAP
     LED_TYPE led0[RGBLED_NUM];
     for (uint8_t i = 0; i < RGBLED_NUM; i++) {
@@ -621,7 +621,13 @@ void rgblight_set(void) {
 #    else
     start_led = led + clipping_start_pos;
 #    endif
-    ws2812_setleds(start_led, num_leds);
+
+#ifdef RGBW
+    for (uint8_t i = 0; i < num_leds; i++) {
+        convert_rgb_to_rgbw(&start_led[i]);
+    }
+#endif
+   ws2812_setleds(start_led, num_leds);
 }
 #endif
 
@@ -920,7 +926,7 @@ void rgblight_effect_snake(animation_status_t *anim) {
         ledp->g        = 0;
         ledp->b        = 0;
 #    ifdef RGBW
-        ledp->w        = 0;
+        ledp->w = 0;
 #    endif
         for (j = 0; j < RGBLIGHT_EFFECT_SNAKE_LENGTH; j++) {
             k = pos + j * increment;
