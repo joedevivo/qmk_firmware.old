@@ -32,7 +32,9 @@ enum userspace_custom_keycodes {
 // Fillers to make layering more clear
 #define _       KC_TRNS
 #define __      KC_TRNS
+#ifndef ___
 #define ___     KC_TRNS
+#endif
 #define ____    KC_TRNS
 #define _____   KC_TRNS
 #define ______  KC_TRNS
