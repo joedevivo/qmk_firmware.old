@@ -74,4 +74,26 @@ enum userspace_custom_keycodes {
 #define RAISE MO(_RAISE)
 
 
+// spacecadets my way
+// I can use the default shifts
+// second mod is LGUI on the left and Meh on the right
+//#define LGPO MT(MOD_LGUI, LSFT(KC_LBRC))
+//define RMPC MT(MOD_MEH, LSFT(KC_RBRC))
+// third mod is LALT on the left, RCTL on the right
+//#define LAPO MT(MOD_LALT, KC_LBRC)
+//#define RCPC MT(MOD_RCTL, KC_RBRC)
+
+
+
 uint32_t layer_state_set_rgb(uint32_t state);
+
+enum td_keycodes {
+    MEH_RCBR
+};
+
+// function to determine the current tapdance state
+int cur_dance (qk_tap_dance_state_t *state);
+
+// `finished` and `reset` functions for each tapdance keycode
+void mehrbrc_finished (qk_tap_dance_state_t *state, void *user_data);
+void mehrbrc_reset (qk_tap_dance_state_t *state, void *user_data);

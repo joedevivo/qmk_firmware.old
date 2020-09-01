@@ -31,7 +31,7 @@
 #if defined(KEYBOARD_ergodox_ez)
   #define TAPPING_TERM 160
 #else
-  #define TAPPING_TERM 150
+  #define TAPPING_TERM 175
 #endif
 
 #ifdef RGBLIGHT_ANIMATIONS
@@ -52,3 +52,8 @@
 // and it saves on space in the firmware.
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
+
+#define LAPO_KEYS KC_LALT, KC_TRNS, KC_LBRC
+#define LCPO_KEYS KC_LGUI, KC_LSFT, KC_LBRC
+//#define RCPC_KEYS LSFT(LCTL(KC_LALT)), KC_LSFT, KC_RBRC
+#define RAPC_KEYS KC_LCTL, KC_TRNS, KC_RBRC

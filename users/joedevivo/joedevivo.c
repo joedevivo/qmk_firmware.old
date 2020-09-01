@@ -1,5 +1,63 @@
 #include "joedevivo.h"
 
+
+typedef enum {
+    SINGLE_TAP,
+    SINGLE_HOLD,
+    DOUBLE_SINGLE_TAP
+} td_state_t;
+
+static td_state_t td_state;
+
+// determine the tapdance state to return
+int cur_dance (qk_tap_dance_state_t *state) {
+  if (state->count == 1) {
+    if (state->interrupted || !state->pressed) { return SINGLE_TAP; }
+    else { return SINGLE_HOLD; }
+  }
+  if (state->count == 2) { return DOUBLE_SINGLE_TAP; }
+  else { return 3; } // any number higher than the maximum state value you return above
+}
+
+// handle the possible states for each tapdance keycode you define:
+
+void mehrbrc_finished (qk_tap_dance_state_t *state, void *user_data) {
+  td_state = cur_dance(state);
+  switch (td_state) {
+    case SINGLE_TAP:
+      register_code16(KC_RCBR);
+      break;
+    case SINGLE_HOLD:
+      register_mods(MOD_BIT(KC_LALT));
+      register_mods(MOD_BIT(KC_LCTL));
+      register_mods(MOD_BIT(KC_LSFT)); // for a layer-tap key, use `layer_on(_MY_LAYER)` here
+      break;
+    case DOUBLE_SINGLE_TAP: // allow nesting of 2 parens `((` within tapping term
+      tap_code16(KC_RCBR);
+      register_code16(KC_RCBR);
+  }
+}
+
+void mehrbrc_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (td_state) {
+    case SINGLE_TAP:
+      unregister_code16(KC_RCBR);
+      break;
+    case SINGLE_HOLD:
+      unregister_mods(MOD_BIT(KC_LALT));
+      unregister_mods(MOD_BIT(KC_LCTL));
+      unregister_mods(MOD_BIT(KC_LSFT)); // for a layer-tap key, use `layer_off(_MY_LAYER)` here
+      break;
+    case DOUBLE_SINGLE_TAP:
+      unregister_code16(KC_RCBR);
+  }
+}
+
+// define `ACTION_TAP_DANCE_FN_ADVANCED()` for each tapdance keycode, passing in `finished` and `reset` functions
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [MEH_RCBR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, mehrbrc_finished, mehrbrc_reset)
+};
+
 #ifdef RGBLIGHT_ENABLE
 //Following line allows macro to read current RGB settings
 extern rgblight_config_t rgblight_config;
