@@ -1,5 +1,4 @@
-
-# Build Options
+# QMK Standard Build Options
 #   change to "no" to disable the options, or define them in the Makefile in
 #   the appropriate keymap folder that will get included automatically
 #
@@ -104,21 +103,9 @@ ifeq ($(strip $(LED_ANIMATIONS)), yes)
 endif
 
 ifeq ($(strip $(OLED_ENABLE)), yes)
-    OPT_DEFS += -DOLED_ENABLE
+    SRC += oled_display.c
 endif
 
-ifeq ($(strip $(LOCAL_GLCDFONT)), yes)
-    OPT_DEFS += -DLOCAL_GLCDFONT
-endif
-
-ifeq ($(strip $(Link_Time_Optimization)),yes)
-    EXTRAFLAGS += -flto -DUSE_Link_Time_Optimization
-endif
-
-# Do not enable SLEEP_LED_ENABLE. it uses the same timer as BACKLIGHT_ENABLE
-SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
-
-# Uncomment these for debugging
-# $(info -- RGBLIGHT_ENABLE=$(RGBLIGHT_ENABLE))
-# $(info -- OPT_DEFS=$(OPT_DEFS))
-# $(info )
+# convert Helix-specific options (that represent combinations of standard options)
+#   into QMK standard options.
+include $(strip $(KEYBOARD_LOCAL_FEATURES_MK))
